@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Post List</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<style>
+div.container{
+display: block;
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+
+}
+
+
+div.bigbox{
+margin-top: 20px;
+margin-bottom: 20px; 
+width: 90%;
+display: block;
+float:center;
+margin-right: auto;
+margin-left: auto;
+background-color: #e6f2f5;
+border-color:transparent;
+}
+
+div.gallery {
+border: 1px solid #ccc;
+float: left;
+width: 100%;
+height: 500px;
+text-align: center;
+margin-bottom: 5px;
+background-color: #e6f2f5;
+border-color:transparent;
+vertical-align:top;
+}
+
+
+div.commentscontainer {
+width:100%;
+height: 250px;
+float: right;
+vertical-align: middle;
+overflow-y: auto;
+overflow-x: hidden;
+margin-bottom: 20px;
+margin-right:15px;
+padding: 5px;
+}
+
+
+div.image-in-gallery {
+width: 100%;
+height: auto;
+float: left;
+padding-left: 10px;
+position: static;
+vertical-align: middle;
+}
+
+div.desc {
+text-align: left;
+padding-top: 15px;
+padding-left: 10px;
+float: left;
+position: relative;
+vertical-align: middle;
+width: 85%;
+height: auto;
+line-height: 25px;
+margin-bottom: 10px; 
+
+}
+
+div.span {
+padding-left: 10%;
+width: 100%;
+height: auto;
+text-align: left;
+}
+
+div.commenticons {
+padding-left: 10%;
+width: 30%;
+height: auto;
+text-align: right;
+float: right;
+position:relative;
+}
+
+div.icons {
+margin-bottom:10px;
+display:block;
+float: right;
+width: 100%; 
+}
+
+div.comment{
+margin-bottom: 27px;
+text-align: left;
+float: left;
+width: 100%;
+display: block;
+padding:10px;
+overflow-wrap:break-word;
+}
+
+div.textinputsection{
+width: 100%;
+height: 50px;
+float: right;
+vertical-align: top;
+text-align: left;
+margin-top:10px;
+}
+
+div.gallery img {
+  width: 350px;
+  height: 300px;
+  float: left;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+</style>
+
+</head>
+
+<body>
+	<header th:insert="fragments/general.html :: header"> </header>
+	<div th:replace="fragments/general.html :: menu"></div>
+	<div class="main">
+	<div class="container" style="text-align:center; margin-left:auto; margin-right:auto">
+		<h1 style="font-weight:bold; padding:15px;">
+		<b><span th:object="${post}" th:text=  ${post.postTitle} >Title</span></b> </h1>
+		
+		<button style="width:150px; float:left; margin-left:5%;">
+			<a th:href="@{/postList/}" style="color:white">Back to List</a>
+		</button>
+		<br/>
+
+		<div class="bigbox" style="display:flex" th:object="${post}">
+				<div class="gallery" style="float:left; width:50%">
+					<div class="image-in-gallery">
+						<div class="desc">
+			                <div style="display:flex">
+				                <div style="width:1500px;">
+				                	<strong th:text = "'Owner Name: ' + ${post.User.name}"/>
+				                </div>
+				                <div class="icons" th:if="${post.user.userId} == ${user.userId}" style="float:right;margin-left:5%">
+					           		<a href="EditPost.html" th:href="@{/postEdit/}+${post.postId}">
+					           			<i class="glyphicon glyphicon-edit"></i></a> &emsp;
+									<a href="DeletePost.html" th:href="@{/postDelete/}+${post.postId}">
+										<i class="glyphicon glyphicon-trash"></i></a>&emsp;
+								</div>
+							</div>
+			
+			                <span th:text = "'Post Type: ' + ${post.PostType}">Post Type</span><br><br>
+			              	<span th:text = ${post.postMessage} style="font-style:oblique">Message</span><br><br>
+			              	
+							<img th:src="@{${'/post/image/'+ post.postId}}" style="float: left; top: 0; bottom: 0;
+								    margin: 0; height: 300px; object-fit: cover; width: 350px; vertical-align: top;" alt="">
+					    </div>
+					
+					</div>	
+				</div>	
+				
+				<div style="float:right; width:50%">	
+					<h4 style="padding-top:10px; text-align:center; margin-right:10%"><b>Comments: </b></h4>
+					<div class="commentscontainer" style="background-color:#cae1e6">
+						<span th:if="${postcommentlist == null}">There are no comments.</span>
+						
+						<div class = "comment" th:each="comment : ${postcommentlist}">
+							<b><span th:text = "${comment.user.name} + '' ">Commenter's Name</span> </b>
+							<span th:text = "'' + 'on  ' + ${#temporals.format(comment.commentDateTime, 'dd-MM-yyyy HH:mm')}">Date</span>
+							
+							
+							<div class="commenticons" th:if="${comment.user.userId} == ${user.userId}" style="float:right">
+								<a href="EditComment.html" th:href="@{/postCommentEdit/}+${comment.commentId}" 
+									th:if="${(comment.user.userId == user.userId) || (#httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString()))}">
+										<i class="glyphicon glyphicon-edit"></i></a> 
+								<a href="DeleteComment.html" th:href="@{/postCommentDelete/}+${comment.commentId}" 
+									th:if="${(comment.user.userId == user.userId) || (#httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString()))}">
+										<i class="glyphicon glyphicon-trash"></i></a> 
+							</div>
+							<br/>
+							<span th:text = "${comment.commentMessage}">Comment</span>
+						</div>
+					
+					</div>
+					
+					
+					<div class="textinputsection">
+						<form action="#" th:object="${postcomment}" th:action="@{/postCommentSave}" method="post" style="width: 90%; margin-right:200px; text-align:left">
+							<fieldset>
+								<b>Edit Comment here </b><textarea type="text" th:field="*{commentMessage}" style="border-color:#4597a8; border-width:thin; width:100%; height: 50px;"> </textarea> <input type="hidden" th:field="*{commentId}" style="float: right"> <input type="hidden" th:field="*{user}" style="float: right"><input type="hidden" th:field="*{commentDateTime}" style="float: right"> <input type="hidden" th:field="*{post}" style="float: right"> 
+								<p th:if="${#fields.hasErrors('commentMessage')}" th:errors="*{commentMessage}"></p>
+							</fieldset>
+							
+							<fieldset style="padding-top:5px">
+								<button><input type="submit" style="float: right; background-color:transparent; border-color:transparent; 
+																	color:white" value="Submit"/></button>
+								&nbsp; &nbsp; 	
+								<button><input type="reset" style="float: right; background-color:transparent; border-color:transparent; 
+																	color:white" value="Reset"/></button>
+							</fieldset>
+						</form>
+	  				</div>
+
+			</div>
+			</div>
+		
+		</div>
+	</div>
+
+    <br/>
+    <h1 th:if="${post == null}">There is no post.</h1>
+	<div style="clear: both;"></div>
+	
+</body>
+<div th:replace="fragments/general.html :: footer"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+  
+  $(document).ready(function() {
+	    $('#upload').bind("click",function() 
+	    { 
+	        var imgVal = $('#fileImage').val(); 
+	        if(imgVal=='') 
+	        { 
+	            alert("empty input file"); 
+	            return false; 
+
+	        } 
+	        return true; 
+
+	    }); 
+	});
+
+</script>
+</html>
+

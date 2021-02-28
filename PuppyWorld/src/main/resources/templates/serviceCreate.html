@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+	<meta charset="UTF-8">
+	<title>Create New Slot</title>
+</head>
+<body>
+	<div th:insert="fragments/general.html :: menu"></div>
+	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px">
+		<h1 style="font-weight:bold; padding:10px">Create New Slot</h1>
+		<br />
+		
+		<form action="#" th:action="@{/serviceSave}" th:object="${service}" method="post">
+
+			<div class="form-group"  style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Name:</label>
+				<input type="text" th:field="*{provider.providerName}" readonly = "readonly">
+				<p style="color:red" th:if="${#fields.hasErrors('provider.providerName')}" th:errors="*{provider.providerName}"></p>
+			</div>
+			
+
+			<input type="hidden" th:field="*{provider.providerId}">
+			
+			<div class="form-group"  style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Date:</label>
+				<input type="date" th:field="*{localDate}">
+				<p style="color:red" th:if="${#fields.hasErrors('localDate')}" th:errors="*{localDate}"></p>
+			</div>
+			
+			<div class="form-group"  style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Time Slots:</label>
+				<input type="checkbox" th:field="*{timeSlots}" th:value="8am" th:text="8am">
+				<input type="checkbox" th:field="*{timeSlots}" th:value="10am" th:text="10am">
+				<input type="checkbox" th:field="*{timeSlots}" th:value="1pm" th:text="1pm">
+				<input type="checkbox" th:field="*{timeSlots}" th:value="3pm" th:text="3pm">
+				<input type="checkbox" th:field="*{timeSlots}" th:value="5pm" th:text="5pm">
+				<p style="color:red" th:if="${#fields.hasErrors('timeSlots')}" th:errors="*{timeSlots}"></p>
+			</div>
+
+			<br/>
+			<button style="width:150px"><a type="submit" name="upload" id="upload" style="margin-left:3%; color:white" th:href="@{/serviceList/} + ${service.provider.providerId}" >Back to List</a></button>
+			<button type="submit" style="margin:5px; color:white">Submit</button>
+				
+		</form>
+		</div>
+		
+	</div>
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+  
+  $(document).ready(function() {
+	    $('#upload').bind("click",function() 
+	    { 
+	        var imgVal = $('#fileImage').val(); 
+	        if(imgVal=='') 
+	        { 
+	            alert("empty input file"); 
+	            return false; 
+
+	        } 
+	        return true; 
+
+	    }); 
+	});
+
+</script>
+</html>

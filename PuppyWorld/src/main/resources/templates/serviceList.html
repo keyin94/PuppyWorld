@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Service List</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+	.gallery{width:300px;float:left;}
+	.gallery img{
+		display:block;
+		width:100%;}
+	
+</style>
+</head>
+<body>
+	<header th:insert="fragments/general.html :: header"> </header>
+	<div th:replace="fragments/general.html :: menu"></div>
+
+	<div class="main" height="150%">
+		<div class="container" style="text-align: center">
+
+			<h1 style="font-weight: bold" th:text="${provider.providerName}">Service</h1>
+			
+		    <div>
+			    <ul style="list-style: none; margin-left:auto; margin-right:auto; padding:10px">
+				    <li style="float:left; margin-left:1%">
+					    <button style="width:150px">
+							<a th:href="@{/providerList}" style="color:white">Back to List</a>
+						</button>
+					</li>
+					
+					<li style="float:left; margin-left:73%">
+						<button th:if="${#httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}">
+							<a th:href="@{/serviceCreate/}+${provider.providerId}" style="color: white">Create New</a>
+						</button>
+					</li>
+				</ul>
+			</div>
+	
+			<br/>
+			<p th:text="${message}" style="color:red;font-size:large"></p>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			
+			<div class="gallery">
+				<img th:src="@{${'/provider/image/'+ provider.providerId}}"
+					class="card img-fluid" alt="" width="300" height="300"
+					style="margin-left: 3%; padding: 10px"> <br />
+				<p th:text="'$'+${#numbers.formatDecimal(provider.price, 0, 2)}">Service Price</p>
+				<p th:text=${provider.providerDescription}>Service Description</p>
+			</div>
+			
+			<div>
+				<table class="table" cellpadding="3" cellspacing="0"
+					style="width: 60%; margin:auto">
+					<thead style="display: table-header-group">
+						<tr>
+							<th style="text-align: center">Date</th>
+							<th style="text-align: center; width:250px">Time Slot</th>
+							<th
+								th:if="${#httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}"
+								style="text-align: center">Delete</th>
+							<th style="text-align: center">Reserve</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="service:${serviceList}">
+							<td th:text="${service.localDate}">Date</td>
+							<td><p style="width:60px; margin-left:12%">
+									<span th:each="product:${service.timeSlots}" th:text="${product}" style="padding-right:10px"></span>
+							</select></td>
+							<td
+								th:if="${#httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}">
+								<a th:href="@{/serviceDelete/}+${service.serviceId}" style="color:#4597a8">
+									<i class="glyphicon glyphicon-trash"></i></a>
+							</td>
+							<td><a th:href="@{/reservationCreate/}+${service.serviceId}" style="color:#4597a8">
+									<i class="glyphicon glyphicon-check"></i></a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+	</div>
+	<br />
+	<div th:replace="fragments/general.html :: footer"></div>
+
+</body>
+</html>

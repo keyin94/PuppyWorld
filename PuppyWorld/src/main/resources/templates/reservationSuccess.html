@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Product List</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+	<header th:insert="fragments/general.html :: header"> </header>
+	<div th:replace="fragments/general.html :: menu"></div>
+	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px">
+	
+	<h1 style="font-weight: bold; padding:25px">Reservation Success!</h1>
+	<h4 style="padding:35px">Thank you for choosing us to pamper your pet</h4>
+	
+	</div>
+	</div>
+	<div th:replace="fragments/general.html :: footer"></div>
+	
+</body>
+<script>
+    setTimeout(function(){
+        window.location.href = 'providerList';
+    }, 2000);
+</script>
+</html>

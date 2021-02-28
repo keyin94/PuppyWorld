@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+    <meta charset="UTF-8">
+    <title>Service List</title>
+</head>
+
+<style>
+    div.container {
+        display: block;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+
+    }
+
+    div.gallery {
+        margin: 5px;
+        border: 1px solid #ccc;
+        float: left;
+        width: 370px;
+        height: 380px;
+        position: relative;
+        text-align: center;
+    }
+
+    div.gallery:hover {
+        border: 1px solid #777;
+    }
+
+
+    div.gallery img {
+        width: 350px;
+        height: 270px;
+        float: left;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    div.desc {
+        padding: 15px;
+        text-align: center;
+        vertical-align: middle;
+
+    }
+</style>
+
+
+<body>
+<div th:insert="fragments/general.html :: menu"></div>
+<div class="main"> <!--  style="height:150%; width:85%;margin-left:auto; margin-right:auto"-->
+    <div class="container" style="text-align: center; margin-bottom: 20px">
+        <h1 style="font-weight:bold; padding:10px;">Service</h1>
+
+        <ul style="list-style: none; margin-left:auto; margin-right:auto; padding:10px">
+            <li th:if="${not #httpServletRequest.remoteUser.isEmpty() and #httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}"
+                style="float:left">
+                <button><a style="color:white" href="#" th:href="@{/providerCreate}">Create New</a></button>
+            </li>
+            <li style="float:left; margin-left:1%" th:if="${not #httpServletRequest.remoteUser.isEmpty() and #httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}">
+					    <button style="width:150px">
+							<a th:href="@{/reservationList}" style="color:white">Reservation</a>
+						</button>
+					</li>
+            <li style="float:right">
+                <div>
+                    <form action="" th:action="@{/searchProvider}" method="post">
+                        <fieldset>
+                            <input type="text" th:value="${keyword}" name="keyword" size="50" required/>
+                            <button type="submit" style="color:white">Search</button>
+                            <button style="margin:5px"><a th:href="@{/providerList}" style="color:white;">Clear</a></button>
+                        </fieldset>
+                        <br/>
+                         
+
+
+                    </form>
+                    <br/>
+                    <p th:text="${message}" style="color:red;font-size:large; margin-right:480px"></p>
+                </div>
+            </li>
+        </ul>
+
+
+
+        <p></p>
+    </div>
+
+    <div class="container">
+
+        <div th:each="provider : ${providerList}">
+            <div class="gallery">
+                <img th:src="@{${'/provider/image/'+ provider.providerId}}"
+                     class="card img-fluid" alt="" width="200" height="200" style="margin-left:3%; padding:10px">
+                <br/><br/><br/><br/><br/><br/><br/>
+                <div class="desc" style="text-align:center"><p><br><span th:text=${provider.providerName}
+                                                                         style="font-weight:bold">Name</span>
+                    <p>$<span th:text="${#numbers.formatDecimal(provider.price, 0, 2)}">Price</span></p>
+                    <p><a href="EditProduct.html" th:href="@{/providerEdit/}+${provider.providerId}"
+                          th:if="${not #httpServletRequest.remoteUser.isEmpty() and #httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}" 
+                          style="color:#4597a8">
+                          	<i class="glyphicon glyphicon-edit"></i></a>
+	                    <a style="padding-left:15px; padding-right:15px ; color:#4597a8" href="DeleteProduct.html" 
+	                       th:href="@{/providerDelete/}+${provider.providerId}"
+	                       th:if="${not #httpServletRequest.remoteUser.isEmpty() and #httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}">
+	                        	<i class="glyphicon glyphicon-trash"></i></a>
+	                    <a href="serviceList.html" th:href="@{/serviceList/}+${provider.providerId}" style="color:#4597a8">
+	                    		<i class="glyphicon glyphicon-eye-open" ></i></a>
+                        <a style="padding-left:15px; margin-right:13px; color:#4597a8" th:onclick="showServiceBarGraph([[${provider.providerId}]])" 
+                           th:if="${not #httpServletRequest.remoteUser.isEmpty() and #httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}">
+                          		<i class="glyphicon glyphicon-stats"></i></a>
+                       <a style="padding-right:15px ; color:#4597a8" href="ReserveProvider.html" 
+	                       th:href="@{/providerReservation/}+${provider.providerId}"
+	                       th:if="${not #httpServletRequest.remoteUser.isEmpty() and #httpServletRequest.isUserInRole(T(com.example.ad.domain.Role).ROLE_ADMIN.toString())}">
+	                        	<i class="glyphicon glyphicon-file"></i></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<h1 th:if="${#lists.isEmpty(providerList)}" style="font-weight:bold; padding:15px;" align="center">Empty List</h1>
+
+
+<div th:replace="fragments/general.html :: footer"></div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+
+    $(document).ready(function () {
+        $('#upload').bind("click", function () {
+            var imgVal = $('#fileImage').val();
+            if (imgVal == '') {
+                alert("empty input file");
+                return false;
+
+            }
+            return true;
+
+        });
+    });
+
+</script>
+
+<script src="js/layer/layer.js"></script>
+<script>
+    function showServiceBarGraph(providerId) {
+        layer.open({
+            type: 2,
+            title: 'Check Service',
+            area: ['800px', '500px'],
+            content: '/serviceBarGraph?providerId=' + providerId
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+	<meta charset="UTF-8">
+	<title>Create New Product</title>
+</head>
+<body>
+	<div th:insert="fragments/general.html :: menu"></div>
+	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px">
+		<h1 style="font-weight:bold; padding:10px">Create New Product</h1>
+		<br />
+		
+		<form action="#" th:action="@{/productSave}" th:object="${product}"
+			method="post" enctype="multipart/form-data">
+
+			<div class="form-group" style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Name:</label>
+				<input type="text" placeholder="Enter product name" th:field="*{productName}">
+				<p style="color:red" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></p>
+				</div>
+
+			<div class="form-group" style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Price:</label>
+				<input type="number" step=0.01 min=0 placeholder="Enter product price" th:field="*{productPrice}">
+				<p style="color:red" th:if="${#fields.hasErrors('productPrice')}" th:errors="*{productPrice}"></p>
+				</div>
+
+			<div class="form-group" style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Quantity:</label>
+				<input type="number" step=1 min=0 placeholder="Enter quantity" th:field="*{productQuantity}">
+				<p style="color:red" th:if="${#fields.hasErrors('productQuantity')}" th:errors="*{productQuantity}"></p>
+				</div>
+
+			<div class="form-group" style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Type:</label>
+				<select th:field="*{productType}">
+				<option th:each="productType : ${T(com.example.ad.domain.ProductType).values()}" 
+							th:value="${productType}" th:text="${productType}"/>
+				</select>
+				</div>
+
+			<br/>
+
+			<div class="form-group" style="margin-left:34%; text-align:left" >
+				<label style="width: 200px; text-align:left"> Upload Image:</label>
+				<br/>
+				<div>
+					<input type="file" class="form-control-file" name="fileImage" id="fileImage" accept="image/*" onchange="loadFile(event)" />
+				</div>
+				<br/>
+				<div class="form-group"  style="margin-left:11%; border-style:solid; border-color:#4597a8; border-width: thin; 
+												height: 200px; width: 200px;">
+					<img id="output" alt="Preview" width="200" height="200"/>
+				</div>
+				</div>
+
+				
+				<button style="margin:5px"><a th:href="@{/productCreate}" style="color:white;">Clear</a></button>
+				<button type="submit" name="upload" id="upload"  class="send_upload" value="upload" style="color:white;">Submit</button>
+				
+		</form>
+		
+	</div>
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+  
+  $(document).ready(function() {
+	    $('#upload').bind("click",function() 
+	    { 
+	        var imgVal = $('#fileImage').val(); 
+	        if(imgVal=='') 
+	        { 
+	            alert("empty input file"); 
+	            return false; 
+
+	        } 
+	        return true; 
+
+	    }); 
+	});
+
+</script>
+</html>

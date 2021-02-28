@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+	<title>PuppyWorld Profile</title>
+</head>
+<body>
+  <div th:insert="fragments/general.html :: menu"></div>
+  	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px">
+	<div style="display:flex">
+	
+	<div style="float:left; width: 30%">
+	<h2 style="padding:10px;font-weight:bold">Profile
+		<a href="EditProfile.html" th:href="@{/edit}" style="font-size:20px; float:right; color:#4597a8">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+	</h2>
+	
+	<table th:if="${not #httpServletRequest.remoteUser.isEmpty()}"  class="table" 
+			style="width:90%; margin-left: 10%; text-align:left; padding: 10px;">
+		<tr>
+			<td>Name</td>
+			<td th:text=${userProfile.name}>Your Name</td>
+		</tr>
+		
+		<tr>
+			<td>User Name</td>
+			<td th:text="${userProfile.userName}"> Your Username</td>
+		</tr>
+
+		<tr>
+			<td>Email Address</td>
+			<td th:text=${userProfile.emailAddress}>Your Email Address</td>
+		</tr>
+		
+	</table> 
+	
+	</div>
+	
+	<br/>
+	<div style="float:right; width:70%">
+	<h2 style="padding:10px; font-weight:bold">Reservation Details</h2>
+	<table class="table" cellpadding="3" cellspacing="0" style="width: 90%;margin-left:10%">
+		<tr>
+			<th style="text-align:center">Reservation Time</th>
+			<th style="text-align:center">Reservation Date</th>
+			<th style="text-align:center">Service</th>
+
+
+			<th style="text-align:center">Cancel</th>  
+		</tr>
+		<tbody>
+		<tr th:each="reservation:${reservationList}" >
+			<td th:text=${reservation.timeSlot}>TimeSlot</td>
+			<td th:text=${reservation.service.localDate}>Reservation Time</td>
+			<td th:text=${reservation.service.provider.providerName} style="text-align:left">Provider Name</td>
+			<td><a th:href="@{/reservationDelete/}+${reservation.reservationId}" style="color:#4597a8" 
+					th:if="${(reservation.status == T(com.example.ad.domain.Status).ACTIVE)}"><i class="glyphicon glyphicon-trash"></i>
+				</a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	</div>
+	</div>
+	
+	</div>
+	</div>
+	
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+</html>

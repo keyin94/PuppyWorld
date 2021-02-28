@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+	<meta charset="UTF-8">
+	<title>Book Service</title>
+</head>
+<body>
+	<div th:insert="fragments/general.html :: menu"></div>
+	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px">
+		<h1 style="font-weight:bold; padding:10px" th:text = "'Book ' + ${service.provider.providerName}">Book Service</h1>
+		<br />
+		<form action="#" th:action="@{/reservationSave}" th:object="${reservation}"
+			method="post" enctype="multipart/form-data">
+
+			<input type="hidden" th:field="${reservation.service.serviceId}" th:value="${service.serviceId}"></input>
+			
+			<div class="form-group" style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Date:</label>
+				<input type="date" th:value="${reservation.service.localDate}" readonly="readonly">
+			</div>
+				
+			<div class="form-group" style="margin-left:34%; text-align:left">
+				<label style="width: 200px; text-align:left">Timeslot:</label>
+				<select th:field="*{timeSlot}">
+     				<option th:each="time:${service.timeSlots}"
+							th:text="${time}" th:value="${time}"></option>
+				</select>
+			</div>
+
+			<br/>
+			<button style="width:150px"><a type="submit" name="upload" id="upload" style="margin-left:3%; color:white;" th:href="@{/serviceList/} + ${service.provider.providerId}" >Back to List</a></button>
+			<button type="submit" style="color:white">Submit</button>
+				
+		</form>
+		
+	</div>
+	</div>
+	
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</html>

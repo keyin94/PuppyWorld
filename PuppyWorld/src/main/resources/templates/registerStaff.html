@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+<!-- <meta charset="ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+<title>PuppyWorld New Staff Registration</title>
+</head>
+<body>
+  <div th:insert="fragments/general.html :: menu"></div>
+  	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px">
+	<h1 style="font-weight:bold; padding:10px;">Register New Staff</h1>
+
+	<br/>
+	<form action="" th:object="${user}" th:action="@{/saveNewStaff}" method="post">
+		<fieldset>
+	      		<div class="form-group" style="margin-left:36%; text-align:left">
+				<label style="width: 120px; text-align:left">Full Name:</label>
+				<input type="text" th:field="*{name}"/>
+				<p style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+				</div>
+				
+				<div class="form-group" style="margin-left:36%; text-align:left">
+				<label style="width: 120px; text-align:left"> Username:</label>
+				<input type="text" th:field="*{userName}"/>
+				<p style="color:red" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
+				</div>
+				
+				<div class="form-group" style="margin-left:36%; text-align:left">
+				<label style="width: 120px; text-align:left"> Password:</label>
+				<input type="password" th:field="*{password}"/>
+				<p style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+				</div>
+
+				<div class="form-group" style="margin-left:36%; text-align:left">
+				<label style="width: 120px; text-align:left"> Email Address:</label>
+				<input type="email" th:field="*{emailAddress}"/>
+				<p style="color:red" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></p>
+				</div>
+	      		<br/>
+	      		<div class="form-actions" style="text-align: center"> 
+	      		<button type="submit" style="color:white">Register</button>
+	      		</div>
+	    </fieldset>
+	  </form>
+
+	</div>
+	</div>
+	
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+</html>

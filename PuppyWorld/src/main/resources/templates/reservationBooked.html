@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Service List</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+	.gallery{width:300px;float:left;}
+	.gallery img{
+		display:block;
+		width:100%;}
+	
+</style>
+</head>
+<body>
+	<header th:insert="fragments/general.html :: header"> </header>
+	<div th:replace="fragments/general.html :: menu"></div>
+
+	<div class="main" height="150%">
+		<div class="container" style="text-align: center">
+
+			<h1> Booked Service</h1>
+			
+		    <div>
+			    <ul style="list-style: none; margin-left:auto; margin-right:auto; padding:10px">
+				    <li style="float:left; margin-left:1%">
+					    <button style="width:150px">
+							<a th:href="@{/providerList}" style="color:white">Back to List</a>
+						</button>
+					</li>
+					
+					
+				</ul>
+			</div>
+	
+			<br/>
+		
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			
+			<div class="gallery">
+				<img th:src="@{${'/provider/image/'+ provider.providerId}}"
+					class="card img-fluid" alt="" width="300" height="300"
+					style="margin-left: 3%; padding: 10px"> <br />
+				<p th:text="'$'+${#numbers.formatDecimal(provider.price, 0, 2)}">Service Price</p>
+				<p th:text=${provider.providerDescription}>Service Description</p>
+			</div>
+			
+			<div>
+				<table class="table" cellpadding="3" cellspacing="0"
+					style="width: 60%; margin:auto">
+					<thead style="display: table-header-group">
+						<tr>
+							<th style="text-align: center">Date</th>
+							<th style="text-align: center">Time Slot</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reservation:${reservations}">
+							<td th:text="${reservation.service.localDate}">Date</td>
+							<td th:text="${reservation.timeSlot}">Date</td>
+							
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+	</div>
+	<br />
+	<div th:replace="fragments/general.html :: footer"></div>
+
+</body>
+</html>

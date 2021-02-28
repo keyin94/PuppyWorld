@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+
+<!-- <meta charset="ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+<title>Puppy Snap</title>
+
+</head>
+<body>
+  <div th:insert="fragments/general.html :: menu"></div>
+  	<div class="main">
+	<div class="container" style="text-align: center; margin-bottom: 20px;">
+		<h1 style="font-weight:bold; padding:10px">Puppy Snap</h1>
+		<br />
+		
+		<div style="display:flex">
+			<div style="float:left; width:50%; text-align:left">
+				<h1 style="font-weight:bold; padding:15px">YOUR RESULT!!!!</h1>
+				<br/>
+				<div th:each="result:${links}">
+					<p >
+						<a th:href="@{${result.link}}" th:text="${result.breed} + ' Click for more info.'" th:target="_blank"></a>
+					</p>
+				</div>
+			</div>
+			<br/><br/>
+			
+			<div style="float:right; padding:20px; padding-left:80px; width:60%">
+				<form action="#" th:action="@{/checkBreedsave}" 
+						method="post" enctype="multipart/form-data" style="background-color:#e6f2f5; height:400px; padding:25px; width:80%; margin-left:auto; margin-right:auto">
+			
+						<div class="form-group" style="margin-left:12%; text-align:left;padding:10px;" >
+							<label style="width: 300px; font-size:18px; text-align:left; margin-left:27%;"> Your Image:</label>
+							<br/>
+
+							<div class="form-group"  style="margin-left:11%; border-style:solid; border-color:#4597a8; border-width: thin; height: 200px; width: 200px;">
+								<img id="output" alt="Preview" width="200" height="200" th:src="@{'data:image/jpeg;base64,'+${image}}"/>
+							</div>
+						</div>
+						<button><a type="submit" name="upload" id="upload" style="margin-left:3%; color:white" th:href="@{/checkBreed}" >Back</a></button>
+							
+				</form>
+			</div>
+		</div >
+	
+	</div>
+	</div>
+	
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+ 
+</script>
+<style>
+.button {
+  background-color: rgb(69,151,168);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+</html>

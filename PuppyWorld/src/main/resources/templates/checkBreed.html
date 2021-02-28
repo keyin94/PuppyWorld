@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/general.html :: header">
+	<title>Puppy Snap</title>
+</head>
+
+<body>
+  <div th:insert="fragments/general.html :: menu"></div>
+  	<div class="main">
+		<div class="container" style="text-align: center; margin-bottom: 20px;">
+			<h1 style="font-weight:bold; padding:10px">Puppy Snap</h1>
+			<br />
+		
+			<div style="display:flex">
+			<div style="float:left; width:50%; text-align:left">
+				<h3 style="font-weight:bold;">Introduction to Puppy Snap:</h3>
+				<p>Are you always confused and wondering what is the breed of the dog you met randomly on the street?</p>
+				<p>Are you always curious what is the breed of the dog your neighbor owns that is forever energetic?<p>
+				<p>Worry no more! With PuppySnap introduced by MYpets, you can easily know the breed of the dog by just simply upload the image of the dog following the instructions below!</p>
+				<p>Let's start to have some fun by uploading the picture of the dog you are interested in below!</p>
+				<p>We also have this as an app called <b>PuppySnap</b> downloadable from App Store!</p>
+				
+				<br/>
+				
+				<h3 style="font-weight:bold;">Instruction: </h3>
+				<p>1. Choose an image from gallery or take a photo</p>
+				<p>2. Press 'Find Breed'</p>
+				<p>3. Voila! The breed will be reveal shortly</p>
+				<p>*Disclaimer: Work best for pure breed</p>
+			</div>
+			
+			<br/><br/>
+		
+			<div style="float:right; padding:20px; padding-left:90px;  width:60%;">
+				<form action="#" th:action="@{/checkBreedsave}" 
+						method="post" enctype="multipart/form-data" 
+						style="background-color:#e6f2f5; height:400px; padding:25px; margin-left:auto; margin-right:auto">
+			
+						<div class="form-group" style="margin-left:18%; text-align:left;padding:10px;" >
+							<label style="width: 300px; font-size:18px; text-align:left; margin-left:10%;"> 
+								Upload Your Image Here:</label>
+							
+							<br/>
+							
+							<div style="margin-left:15%; text-align:left; padding:5px">
+								<input type="file" class="form-control-file" name="fileImage" id="fileImage" 
+										accept="image/*" onchange="loadFile(event)" />
+							</div>
+							
+							<div class="form-group"  style="margin-left:11%; border-style:solid; 
+															border-color:#4597a8; border-width: thin; height: 200px; width: 200px;">
+								<img id="output" alt="Preview" width="200" height="200" th:src="@{'data:image/jpeg;base64,'+${image}}"/>
+							</div>
+						</div>
+						
+						<button type="submit" name="upload" id="upload"  class="send_upload" value="upload" 
+								style="color:white; margin-left:3%">Find Breed</button>
+							
+					</form>
+					
+					<div style="background-color:#e6f2f5;">
+						<div th:each="result:${results}" class="container" style="text-align: center; margin-bottom: 20px;">
+							<p style="text-align: left; color:rgb(0, 0, 0)" th:text=${result}></p>
+						</div>
+					</div>
+				</div>
+			</div >
+		
+		</div>
+	</div>
+	
+	<div th:insert="fragments/general.html :: footer"></div>
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+  
+  $(document).ready(function() {
+	    $('#upload').bind("click",function() 
+	    { 
+	        var imgVal = $('#fileImage').val(); 
+	        if(imgVal=='') 
+	        { 
+	            alert("empty input file"); 
+	            return false; 
+
+	        } 
+	        return true; 
+
+	    }); 
+	});
+
+</script>
+</html>
